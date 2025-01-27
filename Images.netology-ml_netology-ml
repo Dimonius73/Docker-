@@ -1,0 +1,23 @@
+
+0 # debian.sh --arch 'amd64' out/ 'bookworm' '@1733097600'  74.82 MB
+1 LABEL maintainer=Anaconda, Inc  0 B
+2 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 0 B
+3 RUN /bin/sh -c apt-get update -q && apt-get install -q -y --no-install-recommends bzip2 ca-certificates git libglib2.0-0 libsm6 libxext6 libxrender1 mercurial openssh-client procps subversion wget && apt-get clean && rm -rf /var/lib/apt/lists/* # buildkit  176.68 MB
+4 ENV PATH=/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin 0 B
+5 CMD ["/bin/bash"] 0 B
+6 ARG INSTALLER_URL_LINUX64=https://repo.anaconda.com/miniconda/Miniconda3-py312_24.11.1-0-Linux-x86_64.sh 0 B
+7 ARG SHA256SUM_LINUX64=636b209b00b6673471f846581829d4b96b9c3378679925a59a584257c3fef5a3 0 B
+8 ARG INSTALLER_URL_S390X=https://repo.anaconda.com/miniconda/Miniconda3-py312_24.11.1-0-Linux-s390x.sh 0 B
+9 ARG SHA256SUM_S390X=105bce6b0137f574147b8fdfd5e3a7d6c92f3ea9fbf3e0de61331ea43586e9af 0 B
+10 ARG INSTALLER_URL_AARCH64=https://repo.anaconda.com/miniconda/Miniconda3-py312_24.11.1-0-Linux-aarch64.sh 0 B
+11 ARG SHA256SUM_AARCH64=9180a2f1fab799fd76e9ef914643269dcf5bad9d455623b905b87f5d39ae140f 0 B
+12 RUN |6 INSTALLER_URL_LINUX64=https://repo.anaconda.com/miniconda/Miniconda3-py312_24.11.1-0-Linux-x86_64.sh SHA256SUM_LINUX64=636b209b00b6673471f846581829d4b96b9c3378679925a59a584257c3fef5a3 INSTALLER_URL_S390X=https://repo.anaconda.com/miniconda/Miniconda3-py312_24.11.1-0-Linux-s390x.sh SHA256SUM_S390X=105bce6b0137f574147b8fdfd5e3a7d6c92f3ea9fbf3e0de61331ea43586e9af INSTALLER_URL_AARCH64=https://repo.anaconda.com/miniconda/Miniconda3-py312_24.11.1-0-Linux-aarch64.sh SHA256SUM_AARCH64=9180a2f1fab799fd76e9ef914643269dcf5bad9d455623b905b87f5d39ae140f /bin/sh -c set -x && UNAME_M="$(uname -m)" && if [ "${UNAME_M}" = "x86_64" ]; then INSTALLER_URL="${INSTALLER_URL_LINUX64}"; SHA256SUM="${SHA256SUM_LINUX64}"; elif [ "${UNAME_M}" = "s390x" ]; then INSTALLER_URL="${INSTALLER_URL_S390X}"; SHA256SUM="${SHA256SUM_S390X}"; elif [ "${UNAME_M}" = "aarch64" ]; then INSTALLER_URL="${INSTALLER_URL_AARCH64}"; SHA256SUM="${SHA256SUM_AARCH64}"; fi && wget "${INSTALLER_URL}" -O miniconda.sh -q && echo "${SHA256SUM} miniconda.sh" > shasum && sha256sum --check --status shasum && mkdir -p /opt && bash miniconda.sh -b -p /opt/conda && rm miniconda.sh shasum && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && echo "conda activate base" >> ~/.bashrc && find /opt/conda/ -follow -type f -name '*.a' -delete && find /opt/conda/ -follow -type f -name '*.js.map' -delete && /opt/conda/bin/conda clean -afy # buildkit 353.86 MB
+13 WORKDIR /app 0 B
+14 RUN /bin/sh -c echo '#!/bin/bash' > 1.sh && echo 'echo "Hello Netology"' >> 1.sh # buildkit 34 B
+15 RUN /bin/sh -c chmod +x 1.sh # buildkit 34 B
+16 RUN /bin/sh -c pip install mlflow boto3 pymysql # buildkit 975.51 MB
+17 CMD ["./1.sh"] 0 B
+
+
+
+
